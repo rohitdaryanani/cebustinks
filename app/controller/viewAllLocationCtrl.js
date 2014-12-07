@@ -6,40 +6,45 @@
         var vm    = this;
         var defer = $q.defer();
 
-            function geoSuccess(position) {
-                var latitude  = position.coords.latitude;
-                var longitude = position.coords.longitude;
+        function success(position) {
+            var mapcanvas          = document.createElement('div');
+            mapcanvas.id           = 'mapcontainer';
+            mapcanvas.style.height = '400px';
+            mapcanvas.style.width  = '600px';
 
-                vm.currentLocation = latitude + ' ' + longitude;
-                vm.imgUrl          = 'https://maps.googleapis.com/maps/api/staticmap?center=' + latitude + ',' + longitude + '&zoom=13&size=300x300';
+            document.querySelector('article').appendChild(mapcanvas);
 
-                console.log(latitude + ' ' + longitude);
-            }
+            var coords     = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            vm.coordinates = coords;
 
-            function geoError() {
-                window.alert('Sorry, no position available.');
-            }
-
-            var geoOptions = {
-                enableHighAccuracy: true,
-                maximumAge        : 30000,
-                timeout           : 27000
+            var options = {
+                zoom: 15,
+                center: coords,
+                mapTypeControl: false,
+                navigationControlOptions: {
+                  style: google.maps.NavigationControlStyle.SMALL
+                },
+                mapTypeId: google.maps.MapTypeId.ROADMAP
             };
 
-            vm.toggle = 'false';
+            var map = new google.maps.Map(document.getElementById('mapcontainer'), options);
 
-            defer.promise
-                .then( function () {
-                    navigator.geolocation.watchPosition(geoSuccess, geoError, geoOptions);
-                })
-                .then( function () {
-                    vm.toggle = 'true';
-                });
+            var marker = new google.maps.Marker({
+                position: coords,
+                map: map,
+                title:'You are here!'
+            });
+        }
 
-            vm.findMe = function () {
-                defer.resolve();
-            };
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(success);
+        } else {
+          window.alert('Geo Location is not supported');
+        }
 
+        vm.addPlace = function () {
+            console.log( vm.coordinates );
+        };
 
     };
 
