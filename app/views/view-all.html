@@ -1,8 +1,7 @@
 <button ng-click="vm.findMe()">Find Me</button>
-{{vm.currentLocation}}
 <img ng-src="{{vm.imgUrl}}" alt="">
 
 <div ng-show="vm.toggle">
     <p>Does This Location Stink ?</p>
-    <input type="text" ng-model="vm.currentLocation">
+    {{vm.currentLocation}}
 </div>

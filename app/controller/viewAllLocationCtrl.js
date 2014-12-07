@@ -2,25 +2,16 @@
 
 (function () {
 
-    var ViewAllLocationCtrl = function ( LocationFactory ) {
-        var vm = this;
-
-        LocationFactory.getAllLocation()
-            .success( function (locations) {
-                vm.locations = locations;
-                console.log(vm.locations);
-            })
-            .error(function (data, status) {
-              console.log(data);
-              console.log(status);
-            });
+    var ViewAllLocationCtrl = function ( LocationFactory, $q ) {
+        var vm    = this;
+        var defer = $q.defer();
 
             function geoSuccess(position) {
                 var latitude  = position.coords.latitude;
                 var longitude = position.coords.longitude;
 
                 vm.currentLocation = latitude + ' ' + longitude;
-                vm.imgUrl          = 'http://maps.googleapis.com/maps/api/staticmap?center=' + latitude + ',' + longitude + '&zoom=13&size=300x300&sensor=false';
+                vm.imgUrl          = 'https://maps.googleapis.com/maps/api/staticmap?center=' + latitude + ',' + longitude + '&zoom=13&size=300x300';
 
                 console.log(latitude + ' ' + longitude);
             }
@@ -37,9 +28,16 @@
 
             vm.toggle = 'false';
 
+            defer.promise
+                .then( function () {
+                    navigator.geolocation.watchPosition(geoSuccess, geoError, geoOptions);
+                })
+                .then( function () {
+                    vm.toggle = 'true';
+                });
+
             vm.findMe = function () {
-                navigator.geolocation.watchPosition(geoSuccess, geoError, geoOptions);
-                vm.toggle = 'true';
+                defer.resolve();
             };
 
 
