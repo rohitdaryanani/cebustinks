@@ -4,7 +4,7 @@
 
     var ViewAllLocationCtrl = function ( LocationFactory, $q ) {
         var vm    = this;
-        var defer = $q.defer();
+        vm.toggle = false;
 
         function success(position) {
             var mapcanvas          = document.createElement('div');
@@ -34,6 +34,22 @@
                 map: map,
                 title:'You are here!'
             });
+
+            var area = new google.maps.Circle({
+                center:coords,
+                radius:200,
+                strokeColor:'#0000FF',
+                strokeOpacity:0.8,
+                strokeWeight:2,
+                fillColor:'#0000FF',
+                fillOpacity:0.4
+            });
+
+            area.setMap(map);
+
+            vm.toggle = true;
+            console.log(vm.toggle);
+
         }
 
         if (navigator.geolocation) {
