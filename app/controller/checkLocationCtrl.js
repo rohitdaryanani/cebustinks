@@ -2,10 +2,11 @@
 
 (function () {
 
-    var ViewAllLocationCtrl = function ( LocationFactory, $q ) {
+    var CheckLocationCtrl = function ( LocationFactory, $q ) {
         var vm    = this;
-        vm.toggle = false;
+        vm.toggle = true;
 
+        // getting current location and generating canvas for googlemaps
         function success(position) {
             var mapcanvas          = document.createElement('div');
             mapcanvas.id           = 'mapcontainer';
@@ -18,7 +19,7 @@
             vm.coordinates = coords;
 
             var options = {
-                zoom: 15,
+                zoom: 16,
                 center: coords,
                 mapTypeControl: false,
                 navigationControlOptions: {
@@ -52,6 +53,7 @@
 
         }
 
+        // check for geolocation
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(success);
         } else {
@@ -59,12 +61,16 @@
         }
 
         vm.addPlace = function () {
-            console.log( vm.coordinates );
+            LocationFactory.setLocation( vm.coordinates );
+        };
+
+        vm.test = function () {
+            LocationFactory.getLocation();
         };
 
     };
 
 angular.module('cebuStinks')
-    .controller('ViewAllLocationCtrl', ViewAllLocationCtrl);
+    .controller('CheckLocationCtrl', CheckLocationCtrl);
 
 })();
