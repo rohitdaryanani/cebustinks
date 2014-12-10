@@ -3,8 +3,9 @@
 (function () {
 
     var CheckLocationCtrl = function ( LocationFactory, $q ) {
-        var vm    = this;
-        vm.toggle = true;
+        var vm       = this;
+        vm.toggle    = true;
+        var location = {};
 
         // getting current location and generating canvas for googlemaps
         function success(position) {
@@ -61,11 +62,14 @@
         }
 
         vm.addPlace = function () {
-            LocationFactory.setLocation( vm.coordinates );
+            location.k      = vm.coordinates.k;
+            location.B      = vm.coordinates.B;
+            location.rating = 0;
+            LocationFactory.setLocation( location );
         };
 
         vm.test = function () {
-            LocationFactory.getLocation();
+            LocationFactory.getLocations();
         };
 
     };
