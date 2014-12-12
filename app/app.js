@@ -5,8 +5,8 @@
         .module('cebuStinks', ['ngRoute'])
         .config(function ( $routeProvider ) {
             $routeProvider
-                .when( '/checklocation', {
-                    controller  : 'CheckLocationCtrl as vm',
+                .when( '/', {
+		    controller  : 'StinkController as vm',
                     templateUrl : '/app/views/view-all.html'
                 })
                 .otherwise({

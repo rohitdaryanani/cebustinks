@@ -4,16 +4,59 @@
 <head>
     <meta charset="UTF-8">
     <title>Cebu Stinks</title>
+		<style>
+				* {
+					margin  : 0;
+					padding : 0;
+					border  : none;
+					outline : none;
+				}
+
+				body {
+					font      : normal 95%/150% Courier;
+					padding   : 50px;
+					font-size : 14px;
+				}
+
+				p {
+					margin-bottom: 1em;
+				}
+
+				button {
+					font-family      : Courier;
+					padding          : 10px 15px;
+					font-weight      : bold;
+					cursor           : pointer;
+					background-color : #ffffff;
+					color            : #333;
+					border           : 1px solid #aaaaaa;
+				}
+
+				button : hover {
+				}
+
+				button.success {
+					background-color : #aaffcc;
+					border           : 1px solid #11ff11;
+				}
+
+				#map {
+					width   : 400px;
+					height  : 300px;
+					padding : 10px;
+					border  : 1px solid #aaa;
+				}
+		</style>
 </head>
 
 <body ng-app="cebuStinks">
 
-    Welcome to Cebu Stinks
+    <h1>Cebu Stinks</h1>
+
+		<p>&nbsp;</p>
 
     <main>
-        <div ng-view>
-
-        </div>
+	<div ng-view></div>
     </main>
 
     <!-- libraries -->

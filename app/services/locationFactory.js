@@ -2,45 +2,64 @@
 
 (function () {
 
-    var LocationFactory = function ( $http ) {
-        var factory   = {};
-        var locations = [
-            {
-                B      : 123.89596819999997,
-                k      : 10.3100297,
-                rating : 0
-            },
-            {
-                B      : 123.89596819999997,
-                k      : 10.3100297,
-                rating : 4
-            },
-            {
-                B      : 123.89596819999997,
-                k      : 10.3100297,
-                rating : 6
-            },
-            {
-                B      : 123.89596819999997,
-                k      : 10.3100297,
-                rating : 2
-            }
-        ];
+	angular.module('cebuStinks').factory('map', MapService);
 
-        factory.setLocation = function ( location ) {
-            locations.push(location);
-            console.log( location );
-        };
+	function MapService($http, $q, $timeout) {
 
-        factory.getLocations = function () {
-            console.log(locations);
-            return locations;
-        };
+		return {
+			// needs the element for the map
+			// and the initial position
+			layoutMap : function ( el, pos ) {
+				var df = $q.defer();
 
-        return factory;
-    };
+				// Add a one second delay for map processing
+				$timeout(function () {
+					// get initial coords based on the given position
+					var coords = new google.maps.LatLng(pos.latitude, pos.longitude);
 
-    angular.module( 'cebuStinks' )
-        .factory( 'LocationFactory', LocationFactory);
+					var options = {
+						zoom           : 15,
+						center         : coords,
+						mapTypeControl : false,
+						mapTypeId      : google.maps.MapTypeId.ROADMAP,
+
+						navigationControlOptions: {
+							style : google.maps.NavigationControlStyle.SMALL
+						}
+					};
+
+					var map = new google.maps.Map( el, options);
+
+					// let's add them markers and shit
+					new google.maps.Marker({
+						position : coords,
+						map      : map,
+						title    : 'You are here!'
+					});
+
+					// create a fucking circle
+					var area = new google.maps.Circle({
+						center:coords,
+						radius:200,
+						strokeColor:'#0000FF',
+						strokeOpacity:0.8,
+						strokeWeight:2,
+						fillColor:'#0000FF',
+						fillOpacity:0.4
+					});
+
+					// you know this shit already
+					// lol :D
+					area.setMap( map );
+
+					df.resolve(123);
+				}, 1000);
+
+				// return a promise object
+				return df.promise;
+			}
+		};
+
+	}
 
 })();
