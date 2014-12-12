@@ -1,8 +1,13 @@
-<!-- render area for google maps -->
-<article></article>
-
-<div ng-show="vm.toggle">
-    <p>Does this area stinks?</p>
-    <button ng-click="vm.addPlace()">Yes</button>
-    <button ng-click="vm.test()">test</button>
+<p></p>
+<div id="map">
+	<p>Loading current location, please wait...</p>
+</div>
+<div ng-hide="vm.hidden">
+	<p>&nbsp;</p>
+	<p>
+		Does this area stinks like hell? Click `YES` if true.
+	</p>
+	<p>
+		<button class="success" ng-click="vm.toggle()"> Y E S ! </button>
+	</p>
 </div>

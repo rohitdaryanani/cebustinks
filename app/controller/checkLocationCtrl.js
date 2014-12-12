@@ -1,80 +1,25 @@
-'use strict';
-
 (function () {
+	'use strict';
 
-    var CheckLocationCtrl = function ( LocationFactory, $q ) {
-        var vm       = this;
-        vm.toggle    = true;
-        var location = {};
+	angular.module( 'cebuStinks' )
+		.controller( 'StinkController', [ 'map', '$scope', function ( map, $scope ) {
+			var vm    = this;
+			vm.hidden = true;
 
-        // getting current location and generating canvas for googlemaps
-        function success(position) {
-            var mapcanvas          = document.createElement('div');
-            mapcanvas.id           = 'mapcontainer';
-            mapcanvas.style.height = '400px';
-            mapcanvas.style.width  = '600px';
+			// get coordinates
+			navigator.geolocation.getCurrentPosition( function ( pos ) {
+				var coords     = pos.coords;
+				var mapElement = document.querySelector( '#map' );
 
-            document.querySelector('article').appendChild(mapcanvas);
+				// set additional state info
+				mapElement.innerText = 'Fetching google map data...';
 
-            var coords     = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-            vm.coordinates = coords;
+				map.layoutMap( mapElement, coords ).then( function ( d ) {
+					vm.hidden = false;
+				} );
 
-            var options = {
-                zoom: 16,
-                center: coords,
-                mapTypeControl: false,
-                navigationControlOptions: {
-                  style: google.maps.NavigationControlStyle.SMALL
-                },
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
+			} );
 
-            var map = new google.maps.Map(document.getElementById('mapcontainer'), options);
-
-            var marker = new google.maps.Marker({
-                position: coords,
-                map: map,
-                title:'You are here!'
-            });
-
-            var area = new google.maps.Circle({
-                center:coords,
-                radius:200,
-                strokeColor:'#0000FF',
-                strokeOpacity:0.8,
-                strokeWeight:2,
-                fillColor:'#0000FF',
-                fillOpacity:0.4
-            });
-
-            area.setMap(map);
-
-            vm.toggle = true;
-            console.log(vm.toggle);
-
-        }
-
-        // check for geolocation
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(success);
-        } else {
-          window.alert('Geo Location is not supported');
-        }
-
-        vm.addPlace = function () {
-            location.k      = vm.coordinates.k;
-            location.B      = vm.coordinates.B;
-            location.rating = 0;
-            LocationFactory.setLocation( location );
-        };
-
-        vm.test = function () {
-            LocationFactory.getLocations();
-        };
-
-    };
-
-angular.module('cebuStinks')
-    .controller('CheckLocationCtrl', CheckLocationCtrl);
+		} ] );
 
 })();
